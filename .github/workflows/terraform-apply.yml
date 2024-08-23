@@ -35,9 +35,9 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDC authenticate. 
 env:
-  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+  ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
+  ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
 
 jobs:
   terraform-plan:
@@ -133,7 +133,7 @@ jobs:
       env:
         SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
       with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUBO_TOKEN }}
           script: |
             const body = `${process.env.SUMMARY}`;
             github.rest.issues.createComment({
