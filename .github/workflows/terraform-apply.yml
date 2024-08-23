@@ -63,28 +63,31 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      working-directory: environments
+      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }}
       run: terraform init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
-      working-directory: environments
+      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }}
       run: terraform fmt -check
     
     - name: Terraform Validate
-      working-directory: environments
+      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }}
       run: terraform validate
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
-      if: ${{ github.event.inputs.action  == 'plan' }}
-      working-directory: environments  
+      if: ${{ github.event.inputs.action  == 'plan' }} && ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }} 
       id: tf-plan
       run: |
         export exitcode=0
-        terraform ${{ github.event.inputs.action }} -var-file=${{ github.event.inputs.tfvars_file }} -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform ${{ github.event.inputs.action }} -var-file=${{ github.event.inputs.tfvars_file }}.tfvars -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         

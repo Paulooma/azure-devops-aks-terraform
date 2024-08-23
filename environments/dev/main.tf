@@ -11,7 +11,7 @@ resource "tls_private_key" "rsa" {
 }
 
 module "aks" {
-  source               = "../aks/module"
+  source               = "../../aks/module"
   administrator        = var.administrator
   application          = var.application 
   country              = var.application

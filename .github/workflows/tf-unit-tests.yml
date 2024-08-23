@@ -3,6 +3,26 @@ name: 'Terraform Unit Tests'
 on:
   push:
 
+  workflow_dispatch:
+    inputs:
+        tfvars_file:
+          type: choice
+          description: 'Path to the .tfvars file'
+          options:
+          - dev
+          - prod
+          required: true
+          default: 'dev'
+        action:
+          type: choice
+          description: 'Apply or Destroy'
+          options:
+          - plan
+          - apply
+          - destroy
+          required: true
+          default: 'apply'
+
 permissions:
   security-events: write # Needed to upload-sarif
   contents: read # Needed to clone repo
@@ -22,19 +42,22 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.   
     - name: Terraform Init
-      working-directory: environments
+      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }}
       run: terraform init -backend=false
 
     # Validate terraform files
     - name: Terraform Validate
-      working-directory: environments
+      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }}
       run: terraform validate
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
-      working-directory: environments
+      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
+      working-directory: environments/${{ github.event.inputs.tfvars_file }}
       run: terraform fmt -check -recursive
     
     # Perform a security scan of the terraform code using checkov
