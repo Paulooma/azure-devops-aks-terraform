@@ -41,23 +41,28 @@ jobs:
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
+    
+    # Export the Azure Login Credentials to the Github environment
+    - name: Export Azure Login Credentials
+      run: |
+       echo "ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}" >> $GITHUB_ENV
+       echo "ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }}" >> $GITHUB_ENV
+       echo "ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+       echo "ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}" >> $GITHUB_ENV
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.   
     - name: Terraform Init
-      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
-      working-directory: environments/${{ github.event.inputs.tfvars_file }}
-      run: terraform init -backend=false
+      working-directory: "environments/dev"
+      run: terraform init
 
     # Validate terraform files
     - name: Terraform Validate
-      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
-      working-directory: environments/${{ github.event.inputs.tfvars_file }}
+      working-directory: "environments/dev"
       run: terraform validate
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
-      if: ${{ github.event.inputs.tfvars_file  == 'dev' }}
-      working-directory: environments/${{ github.event.inputs.tfvars_file }}
+      working-directory: "environments/dev"
       run: terraform fmt -check -recursive
     
     # Perform a security scan of the terraform code using checkov
