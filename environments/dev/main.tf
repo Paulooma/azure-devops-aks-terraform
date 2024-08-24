@@ -13,10 +13,10 @@ resource "tls_private_key" "rsa" {
 module "aks" {
   source               = "../../aks/module"
   administrator        = var.administrator
-  application          = var.application 
+  application          = var.application
   country              = var.application
   description          = var.description
-  deployment           = var.deployment 
+  deployment           = var.deployment
   region               = var.region
   authorized_ip_ranges = local.authorized_ip_ranges
   public_key_openssh   = tls_private_key.rsa.public_key_openssh

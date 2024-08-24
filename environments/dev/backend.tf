@@ -8,7 +8,7 @@ terraform {
       source = "Azure/azapi"
     }
     tls = {
-      source = "hashicorp/tls"
+      source  = "hashicorp/tls"
       version = "4.0.5"
     }
   }
@@ -23,7 +23,7 @@ terraform {
 
 provider "azurerm" {
   skip_provider_registration = "true"
-  use_oidc = true
+  use_oidc                   = true
   features {
     key_vault {
       purge_soft_delete_on_destroy = true

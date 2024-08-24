@@ -37,7 +37,7 @@ variable "sdlc_environment" {
 }
 
 locals {
-  authorized_ip_ranges = [ "${chomp(data.http.myip.response_body)}/32" ]
+  authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
   aks_tags = {
     Administrator = "${var.administrator}"
     Application   = "${var.application}"
@@ -45,6 +45,6 @@ locals {
     Deployment    = "${var.deployment}"
     Stage         = "${var.sdlc_environment}"
     Description   = "${var.description}"
-    DeployedOn  = timestamp()
+    DeployedOn    = timestamp()
   }
 }
