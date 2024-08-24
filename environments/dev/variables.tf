@@ -34,6 +34,7 @@ variable "vm_size" {
 
 variable "sdlc_environment" {
   description = "The value for the sdlc environment"
+  default = "dev"
 }
 
 locals {
