@@ -38,6 +38,8 @@ env:
   ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
+  ARM_CLIENT_SECRET: "${{secrets.ARM_CLIENT_SECRET}}"
+  TARGET_DIR: ${{ github.workspace }}/azure-devops-aks-terraform/environments
 
 jobs:
   terraform-plan:
@@ -107,7 +109,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
-        path: tfplan
+        path: ${{ env.TARGET_DIR }}/dev/tfplan
         
     # Create string output of Terraform Plan
     - name: Create String Output
@@ -170,7 +172,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      working-directory: environments
+      working-directory: environments/dev
       run: terraform init
 
     # Download saved plan from artifacts  
@@ -178,7 +180,9 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: tfplan
+        path: ${{ env.TARGET_DIR }}/dev
 
     # Terraform Apply
     - name: Terraform Apply
+      working-directory: environments/dev
       run: terraform apply -auto-approve tfplan
