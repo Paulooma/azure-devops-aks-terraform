@@ -14,7 +14,7 @@ module "aks" {
   source               = "../../aks/module"
   administrator        = var.administrator
   application          = var.application
-  country              = var.application
+  country              = var.country
   description          = var.description
   deployment           = var.deployment
   region               = var.region
