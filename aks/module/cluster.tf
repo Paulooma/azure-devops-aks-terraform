@@ -24,11 +24,11 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  name                         = local.aks_name
+  name                         = local.aks_k8s_name
   resource_group_name          = azurerm_resource_group.this.name
   location                     = azurerm_resource_group.this.location
   node_resource_group          = local.aks_node_rg_name
-  dns_prefix                   = local.aks_name
+  dns_prefix                   = local.aks_k8s_name
   sku_tier                     = "Standard"
   oidc_issuer_enabled          = true
   workload_identity_enabled    = true

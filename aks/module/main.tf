@@ -25,6 +25,7 @@ resource "random_pet" "this" {
 locals {
   location             = var.region
   aks_name             = lower("rg-${var.country}-${var.application}-${var.sdlc_environment}")
+  aks_k8s_name          = "${local.resource_name}-aks"
   aks_node_rg_name     = lower("rg-nodes-${var.country}-${var.application}-${var.sdlc_environment}")
   vnet_cidr            = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
