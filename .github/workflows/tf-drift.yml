@@ -32,9 +32,11 @@ permissions:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
-  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+    ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+    ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
+    ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
+    ARM_CLIENT_SECRET: "${{secrets.ARM_CLIENT_SECRET}}"
+    TARGET_DIR: ${{ github.workspace }}/environments
 
 jobs:
   terraform-plan:
@@ -56,21 +58,21 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_wrapper: false
+        terraform_version: 1.9.5
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      working-directory: environments
+      working-directory: environments/dev
       run: terraform init
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
-      if: ${{ github.event.inputs.action  == 'plan' }}
-      working-directory: environments  
+      working-directory: environments/dev  
       id: tf-plan
       run: |
         export exitcode=0
-        terraform plan -var-file=${{ github.event.inputs.tfvars_file }} -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
         
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -86,13 +88,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
-        path: tfplan
+        path: ${{ env.TARGET_DIR }}/dev/tfplan
         
     # Create string output of Terraform Plan
     - name: Create String Output
       id: tf-plan-string
       run: |
-        TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+        TERRAFORM_PLAN=$(terraform -chdir=$TARGET_DIR/dev show -no-color tfplan)
         
         delimiter="$(openssl rand -hex 8)"
         echo "summary<<${delimiter}" >> $GITHUB_OUTPUT

@@ -44,13 +44,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   node_os_channel_upgrade   = "SecurityPatch"
 
   api_server_access_profile {
-    vnet_integration_enabled = true
-    subnet_id                = azurerm_subnet.api.id
     authorized_ip_ranges     = var.authorized_ip_ranges
   }
 
   azure_active_directory_role_based_access_control {
-    managed            = true
     azure_rbac_enabled = true
     tenant_id          = data.azurerm_client_config.current.tenant_id
   }
