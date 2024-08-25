@@ -1,7 +1,7 @@
 region        = "northeurope"
 administrator = "testadmin"
-application   = "Kubernetes"
-country       = "tst"
+application   = "k8s"
+country       = "ts"
 description   = "Testing Kubernetes"
 deployment    = "tf"
 

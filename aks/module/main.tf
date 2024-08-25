@@ -24,8 +24,8 @@ resource "random_pet" "this" {
 
 locals {
   location             = var.region
-  aks_name             = "${local.resource_name}-aks"
-  aks_node_rg_name     = "${local.aks_name}_nodes_rg"
+  aks_name             = lower("rg-${var.country}-${var.application}-${var.sdlc_environment}")
+  aks_node_rg_name     = lower("rg-nodes-${var.country}-${var.application}-${var.sdlc_environment}")
   vnet_cidr            = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
   api_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 2)
@@ -45,7 +45,7 @@ locals {
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "${local.aks_name}_rg"
+  name     = local.aks_name
   location = local.location
 
   tags = var.tags
