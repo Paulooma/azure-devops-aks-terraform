@@ -39,7 +39,7 @@ env:
   ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
   ARM_CLIENT_SECRET: "${{secrets.ARM_CLIENT_SECRET}}"
-  TARGET_DIR: ${{ github.workspace }}/azure-devops-aks-terraform/environments
+  TARGET_DIR: ${{ github.workspace }}/environments
 
 jobs:
   terraform-plan:
