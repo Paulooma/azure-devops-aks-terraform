@@ -3,4 +3,4 @@ plan
 **/.terraform/*
 *.tfstate
 *.tfstate.backup
-
+*.tfvars
