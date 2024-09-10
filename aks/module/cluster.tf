@@ -40,8 +40,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
 
-  automatic_channel_upgrade = "patch"
-  node_os_channel_upgrade   = "SecurityPatch"
+  automatic_upgrade_channel = "patch"
+  node_os_upgrade_channel   = "SecurityPatch"
 
   api_server_access_profile {
     authorized_ip_ranges     = var.authorized_ip_ranges
@@ -79,7 +79,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     vnet_subnet_id               = azurerm_subnet.nodes.id
     os_sku                       = var.vm_os
     type                         = "VirtualMachineScaleSets"
-    enable_auto_scaling          = true
+    auto_scaling_enabled          = true
     min_count                    = 1
     max_count                    = var.node_count
     max_pods                     = 250
@@ -106,7 +106,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
     content {
       mode                             = "Istio"
-      internal_ingress_gateway_enabled = true
+      revisions                         = "asm-1-21"
     }
   }
 
