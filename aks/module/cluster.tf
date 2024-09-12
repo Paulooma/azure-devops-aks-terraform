@@ -106,7 +106,8 @@ resource "azurerm_kubernetes_cluster" "this" {
 
     content {
       mode                             = "Istio"
-      revisions                         = "asm-1-21"
+      internal_ingress_gateway_enabled = true
+      revisions                        = ["asm-1-21"]
     }
   }
 

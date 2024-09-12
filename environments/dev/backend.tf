@@ -5,7 +5,7 @@ terraform {
       version = "4.1.0"
     }
     azapi = {
-      source = "Azure/azapi"
+      source  = "Azure/azapi"
       version = "~> 1"
     }
     tls = {
